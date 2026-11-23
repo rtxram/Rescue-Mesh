@@ -215,7 +215,11 @@ class PriorityScheduler(
             val targets: List<String?> = when {
                 peerIds.isEmpty() && hasLiveTransportLinks -> listOf(null)
                 candidatePeers.isNotEmpty() -> candidatePeers
-                entry.isOriginLocal || isControlHandshake -> peerIds
+                // Broadcast spray re-runs only for control/handshake packets. Regular
+                // origin-local traffic (SOS, replies, location, audio) must not be
+                // re-sprayed to everyone on every flush cycle once all known peers
+                // have already received it — that collapses the mesh in an emergency.
+                isControlHandshake -> peerIds
                 else -> continue
             }
 
@@ -250,6 +254,24 @@ class PeerDiscoveryManager(
 ) {
     suspend fun onPeerDiscoveredOrUpdated(peer: Peer) {
         val existing = repository.getPeer(peer.peerId)
+        if (existing != null) {
+            // Never let over-the-air announcements overwrite an already-known key for this
+            // peerId: the binding peerId=fingerprint(ed25519) was verified upstream, but a
+            // previously stored key is the trusted one (TOFU from pairing or first hello).
+            val keyChanged = existing.ed25519PublicKeyHex.isNotBlank() &&
+                peer.ed25519PublicKeyHex.isNotBlank() &&
+                !existing.ed25519PublicKeyHex.equals(peer.ed25519PublicKeyHex, ignoreCase = true)
+            if (keyChanged) {
+                repository.upsertPeer(
+                    existing.copy(
+                        connectionState = peer.connectionState,
+                        rssi = peer.rssi,
+                        lastSeenAtMillis = peer.lastSeenAtMillis
+                    )
+                )
+                return
+            }
+        }
         val merged = if (existing != null) {
             existing.copy(
                 displayName = peer.displayName.ifBlank { existing.displayName },

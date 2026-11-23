@@ -406,6 +406,10 @@ class MessageRouter(
                         )
                     )
                     if (ackWire.isFinalDelivery) {
+                        // Delivered means done: drop the origin's queued copy (and any relay
+                        // copies still circulating) so replies/location updates don't linger
+                        // for the full 12h TTL and re-spray on every flush.
+                        storeForwardQueue.remove(ackWire.ackedPacketId)
                         val isSessionAcceptanceAck = ackWire.ackedPacketId == packet.sessionId
                         repository.getSession(packet.sessionId)?.let { s ->
                             val resolvedRecipient = if (
@@ -463,11 +467,17 @@ class MessageRouter(
             }
 
             PacketType.SESSION_RESOLVED -> {
+                // Only the session creator may terminate a session; relays and bystanders
+                // must never be able to kill someone else's emergency.
+                val existing = repository.getSession(packet.sessionId)
+                if (existing != null && !packet.senderId.equals(existing.creatorPeerId, ignoreCase = true)) {
+                    return
+                }
                 val statusText = String(clearPayload, StandardCharsets.UTF_8).trim().uppercase()
                 val resolvedStatus = if (statusText == "CANCELLED") SessionStatus.CANCELLED else SessionStatus.RESOLVED
                 repository.clearPendingRelaysForSession(packet.sessionId)
                 onSessionTerminated?.invoke(packet.sessionId, resolvedStatus)
-                val existing = repository.getSession(packet.sessionId) ?: return
+                if (existing == null) return
                 repository.upsertSession(
                     existing.copy(status = resolvedStatus, updatedAtMillis = now, unread = false)
                 )
@@ -784,10 +794,13 @@ class MessageRouter(
         return try {
             val buf = ByteBuffer.wrap(bytes)
             val idLen = buf.get().toInt() and 0xFF
+            if (idLen == 0 || buf.remaining() < idLen + 8) return null
             val idBytes = ByteArray(idLen).also { buf.get(it) }
             val index = buf.getShort().toInt() and 0xFFFF
             val total = buf.getShort().toInt() and 0xFFFF
+            if (total == 0 || index >= total) return null
             val dataLen = buf.getInt()
+            if (dataLen <= 0 || dataLen > buf.remaining()) return null
             val data = ByteArray(dataLen).also { buf.get(it) }
             DecodedAudioFragment(String(idBytes, StandardCharsets.UTF_8), index, total, data)
         } catch (_: Exception) {

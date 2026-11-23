@@ -1122,6 +1122,13 @@ class BleGattMeshTransport(
             val payloadStr = String(bytes, 2, bytes.size - 2, StandardCharsets.UTF_8)
             val hello = runCatching { json.decodeFromString<HelloWirePayload>(payloadStr) }.getOrNull() ?: return
             if (hello.id.isBlank() || hello.id.equals(localPeerIdProvider(), ignoreCase = true)) return
+            // Identity binding: the announced peerId must be the fingerprint of the announced
+            // Ed25519 key, and both keys must be well-formed hex. Otherwise this hello is
+            // a spoof attempt trying to poison the peer's encryption key.
+            val edPubBytes = RescueCrypto.hexToBytes(hello.ed)
+            val xPubBytes = RescueCrypto.hexToBytes(hello.x)
+            if (edPubBytes.size != 32 || xPubBytes.size != 32) return
+            if (!RescueCrypto.derivePeerId(edPubBytes).equals(hello.id, ignoreCase = true)) return
 
             addressToPeerId[address] = hello.id
             if (fromServerPath) {

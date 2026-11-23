@@ -158,7 +158,8 @@ object RescueCrypto {
 
     fun hexToBytes(hex: String): ByteArray {
         val clean = hex.trim()
-        if (clean.length % 2 != 0) return ByteArray(0)
+        if (clean.isEmpty() || clean.length % 2 != 0) return ByteArray(0)
+        if (clean.any { Character.digit(it, 16) < 0 }) return ByteArray(0)
         return ByteArray(clean.length / 2) { i ->
             clean.substring(i * 2, i * 2 + 2).toInt(16).toByte()
         }
@@ -373,58 +374,63 @@ class IdentityManager(context: Context) {
     val localPeerId: String get() = identity.peerId
 
     private fun loadOrCreateIdentity(): RescueCrypto.IdentityKeyPair {
-        val edPrivHex = prefs.getString("ed_priv_hex", null)
-        val edPubHex = prefs.getString("ed_pub_hex", null)
-        val xPrivHex = prefs.getString("x_priv_hex", null)
-        val xPubHex = prefs.getString("x_pub_hex", null)
-
-        if (edPrivHex != null && edPubHex != null && xPrivHex != null && xPubHex != null) {
-            val edPriv = RescueCrypto.hexToBytes(edPrivHex)
-            val edPub = RescueCrypto.hexToBytes(edPubHex)
-            val xPriv = RescueCrypto.hexToBytes(xPrivHex)
-            val xPub = RescueCrypto.hexToBytes(xPubHex)
-            if (edPriv.size == 32 && edPub.size == 32 && xPriv.size == 32 && xPub.size == 32) {
-                return RescueCrypto.IdentityKeyPair(
-                    ed25519Private = edPriv,
-                    ed25519Public = edPub,
-                    x25519Private = xPriv,
-                    x25519Public = xPub
-                )
-            }
-        }
-
         val edPrivB64 = prefs.getString("ed_priv_enc", null)
         val edPubB64 = prefs.getString("ed_pub", null)
         val xPrivB64 = prefs.getString("x_priv_enc", null)
         val xPubB64 = prefs.getString("x_pub", null)
 
         if (edPrivB64 != null && edPubB64 != null && xPrivB64 != null && xPubB64 != null) {
-            val edPriv = decryptWithKeystoreOrFallback(Base64.decode(edPrivB64, Base64.NO_WRAP))
-            val xPriv = decryptWithKeystoreOrFallback(Base64.decode(xPrivB64, Base64.NO_WRAP))
-            if (edPriv != null && xPriv != null) {
-                val edPub = Base64.decode(edPubB64, Base64.NO_WRAP)
-                val xPub = Base64.decode(xPubB64, Base64.NO_WRAP)
+            val edPriv = try {
+                decryptWithKeystoreOrFallback(Base64.decode(edPrivB64, Base64.NO_WRAP))
+            } catch (_: Exception) {
+                null
+            }
+            val xPriv = try {
+                decryptWithKeystoreOrFallback(Base64.decode(xPrivB64, Base64.NO_WRAP))
+            } catch (_: Exception) {
+                null
+            }
+            if (edPriv != null && xPriv != null && edPriv.size == 32 && xPriv.size == 32) {
+                return RescueCrypto.IdentityKeyPair(
+                    ed25519Private = edPriv,
+                    ed25519Public = Base64.decode(edPubB64, Base64.NO_WRAP),
+                    x25519Private = xPriv,
+                    x25519Public = Base64.decode(xPubB64, Base64.NO_WRAP)
+                )
+            }
+        }
+
+        // Legacy plaintext keys (if any) are consumed once and migrated into the
+        // keystore-encrypted blob only, then erased.
+        val legacyEdPriv = prefs.getString("ed_priv_hex", null)
+        val legacyEdPub = prefs.getString("ed_pub_hex", null)
+        val legacyXPriv = prefs.getString("x_priv_hex", null)
+        val legacyXPub = prefs.getString("x_pub_hex", null)
+        if (legacyEdPriv != null && legacyEdPub != null && legacyXPriv != null && legacyXPub != null) {
+            val edPriv = RescueCrypto.hexToBytes(legacyEdPriv)
+            val xPriv = RescueCrypto.hexToBytes(legacyXPriv)
+            if (edPriv.size == 32 && xPriv.size == 32) {
                 prefs.edit()
-                    .putString("ed_priv_hex", RescueCrypto.bytesToHex(edPriv))
-                    .putString("ed_pub_hex", RescueCrypto.bytesToHex(edPub))
-                    .putString("x_priv_hex", RescueCrypto.bytesToHex(xPriv))
-                    .putString("x_pub_hex", RescueCrypto.bytesToHex(xPub))
+                    .putString("ed_priv_enc", Base64.encodeToString(encryptWithKeystoreOrFallback(edPriv), Base64.NO_WRAP))
+                    .putString("ed_pub", legacyEdPub)
+                    .putString("x_priv_enc", Base64.encodeToString(encryptWithKeystoreOrFallback(xPriv), Base64.NO_WRAP))
+                    .putString("x_pub", legacyXPub)
+                    .remove("ed_priv_hex")
+                    .remove("ed_pub_hex")
+                    .remove("x_priv_hex")
+                    .remove("x_pub_hex")
                     .commit()
                 return RescueCrypto.IdentityKeyPair(
                     ed25519Private = edPriv,
-                    ed25519Public = edPub,
+                    ed25519Public = RescueCrypto.hexToBytes(legacyEdPub),
                     x25519Private = xPriv,
-                    x25519Public = xPub
+                    x25519Public = RescueCrypto.hexToBytes(legacyXPub)
                 )
             }
         }
 
         val generated = RescueCrypto.generateIdentityKeyPair()
         prefs.edit()
-            .putString("ed_priv_hex", RescueCrypto.bytesToHex(generated.ed25519Private))
-            .putString("ed_pub_hex", RescueCrypto.bytesToHex(generated.ed25519Public))
-            .putString("x_priv_hex", RescueCrypto.bytesToHex(generated.x25519Private))
-            .putString("x_pub_hex", RescueCrypto.bytesToHex(generated.x25519Public))
             .putString("ed_priv_enc", Base64.encodeToString(encryptWithKeystoreOrFallback(generated.ed25519Private), Base64.NO_WRAP))
             .putString("ed_pub", Base64.encodeToString(generated.ed25519Public, Base64.NO_WRAP))
             .putString("x_priv_enc", Base64.encodeToString(encryptWithKeystoreOrFallback(generated.x25519Private), Base64.NO_WRAP))
