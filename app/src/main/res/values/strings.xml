@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RescueMesh</string>
+    <string name="tile_sos_label">RescueMesh SOS</string>
+    <string name="tile_sos_subtitle">Open SOS trigger</string>
+    <string name="fgs_channel_name">RescueMesh Relay</string>
+    <string name="fgs_channel_desc">Keeps offline Bluetooth emergency mesh discovery and store-carry-forward active.</string>
+    <string name="alert_channel_name">Emergency SOS Alerts</string>
+    <string name="alert_channel_desc">High-priority incoming SOS alerts and emergency replies from nearby mesh peers.</string>
+</resources>

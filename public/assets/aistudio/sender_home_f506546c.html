@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-tint": "#565e74", "surface": "#f8f9ff", "on-surface": "#0b1c30", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "tertiary-fixed-dim": "#68dba9", "inverse-on-surface": "#eaf1ff", "tertiary-container": "#002114", "surface-container": "#e5eeff", "on-tertiary-container": "#069669", "surface-bright": "#f8f9ff", "background": "#f8f9ff", "primary-fixed": "#dae2fd", "on-background": "#0b1c30", "on-tertiary-fixed": "#002114", "primary-container": "#131b2e", "on-secondary-fixed": "#410002", "secondary": "#bb0112", "tertiary": "#000000", "outline-variant": "#c6c6cd", "on-error": "#ffffff", "on-secondary-fixed-variant": "#93000b", "surface-container-highest": "#d3e4fe", "error-container": "#ffdad6", "on-primary-fixed-variant": "#3f465c", "primary": "#000000", "surface-variant": "#d3e4fe", "surface-container-low": "#eff4ff", "on-tertiary-fixed-variant": "#005137", "surface-container-high": "#dce9ff", "on-surface-variant": "#45464d", "secondary-container": "#e02928", "tertiary-fixed": "#85f8c4", "on-primary-container": "#7c839b", "on-primary-fixed": "#131b2e", "on-secondary-container": "#fffbff", "on-primary": "#ffffff", "outline": "#76777d", "inverse-surface": "#213145", "on-secondary": "#ffffff", "inverse-primary": "#bec6e0", "secondary-fixed-dim": "#ffb4ab", "secondary-fixed": "#ffdad6", "surface-dim": "#cbdbf5", "error": "#ba1a1a", "primary-fixed-dim": "#bec6e0", "surface-container-lowest": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-xs": "0.25rem", "margin": "1rem", "space-lg": "1.5rem", "space-xl": "2.5rem", "space-md": "1rem", "gutter": "1rem" }, fontFamily: { "label-lg": ["JetBrains Mono"], "headline-xl-mobile": ["Space Grotesk"], "headline-lg-mobile": ["Space Grotesk"], "headline-xl": ["Space Grotesk"], "body-sm": ["Chivo"], "headline-md": ["Space Grotesk"], "body-md": ["Chivo"], "label-md": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "body-lg": ["Chivo"], "label-sm": ["JetBrains Mono"] }, fontSize: { "label-lg": ["14px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-xl-mobile": ["30px", { lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700" }], "headline-lg-mobile": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "700" }], "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-md": ["20px", { lineHeight: "26px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500" }], "headline-lg": ["28px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }] } } } };</script><style>@layer base{html,body{margin:0;padding:0;width:100vw;min-height:100%;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-surface-container-highest flex flex-col justify-between min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-md"><div class="h-16 px-6 flex items-center justify-between"><button aria-label="Menu" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container/60 active:scale-95 transition-all"><span class="material-symbols-outlined text-[24px]">menu</span></button><h1 class="font-headline-md text-[19px] font-semibold tracking-tight text-on-surface">Rescue Mesh</h1><button aria-label="Settings" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 active:scale-95 transition-all"><span class="material-symbols-outlined text-[22px]">settings</span></button></div></header><main class="flex-1 flex flex-col items-center justify-center w-full pt-20 pb-24 px-6"><div class="flex flex-col items-center justify-center w-full max-w-sm select-none my-auto">
+<!-- Subtle Node Badge -->
+<div class="mb-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container/70 border border-surface-container-high/80 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-sm text-[11px] font-medium tracking-wider uppercase text-on-surface">Node: #7429</span>
+</div>
+<!-- Clean, Modern SOS Beacon Centerpiece -->
+<div class="relative flex items-center justify-center my-4">
+<!-- Subtle Soft Ambient Rings -->
+<div class="absolute w-72 h-72 rounded-full bg-secondary/[0.04] animate-ping duration-[3000ms] pointer-events-none"></div>
+<div class="absolute w-64 h-64 rounded-full bg-secondary/[0.07] pointer-events-none transition-all"></div>
+<div class="absolute w-56 h-56 rounded-full bg-secondary/[0.12] pointer-events-none transition-all"></div>
+<!-- High-Contrast Modern SOS Button -->
+<button aria-label="Hold to trigger Emergency SOS Beacon" class="relative group z-10 w-48 h-48 rounded-full bg-gradient-to-b from-[#e32a26] to-[#b70314] flex flex-col items-center justify-center text-white shadow-[0_20px_45px_rgba(187,1,18,0.28),0_4px_12px_rgba(0,0,0,0.12)] active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden touch-none" id="sosTrigger" type="button">
+<!-- Subtle Top Specular Sheen -->
+<div class="absolute -top-10 inset-x-0 h-24 bg-white/20 rounded-full blur-lg pointer-events-none"></div>
+<!-- SVG Progress Ring -->
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 192 192">
+<circle cx="96" cy="96" fill="none" r="90" stroke="rgba(255,255,255,0.18)" stroke-width="5"></circle>
+<circle class="transition-all duration-75" cx="96" cy="96" fill="none" id="sosProgressBar" r="90" stroke="#FFFFFF" stroke-dasharray="565.48" stroke-dashoffset="565.48" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<!-- Inner Content -->
+<div class="flex flex-col items-center justify-center space-y-1 z-10">
+<span class="material-symbols-outlined text-white text-[28px] drop-shadow-sm font-light">emergency_share</span>
+<span class="font-headline-xl text-[38px] leading-tight text-white font-bold tracking-widest drop-shadow-sm">SOS</span>
+</div>
+</button>
+</div>
+<!-- Clean Subtle Instruction -->
+<div class="mt-10 text-center">
+<p class="font-label-md text-[13px] text-on-surface-variant font-medium tracking-wide" id="sosHoldNotice">Hold for 2 seconds to activate</p>
+</div>
+</div>
+<!-- Minimal Emergency Triggered Modal -->
+<div class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6" id="sosAlertModal">
+<div class="bg-surface-container-lowest rounded-2xl max-w-xs w-full p-6 shadow-2xl flex flex-col items-center text-center space-y-4">
+<div class="w-14 h-14 rounded-full bg-secondary-container/15 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[32px]">crisis_alert</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Emergency Signal Sent</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Distress beacon queued across available mesh nodes.</p>
+</div>
+<button class="w-full py-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl font-label-md text-label-md font-semibold transition-all" id="cancelSosBtn" type="button">
+        Dismiss
+      </button>
+</div>
+</div>
+<script>
+  (function initTactileSos() {
+    const sosTrigger = document.getElementById('sosTrigger');
+    const progressBar = document.getElementById('sosProgressBar');
+    const notice = document.getElementById('sosHoldNotice');
+    const alertModal = document.getElementById('sosAlertModal');
+    const cancelSosBtn = document.getElementById('cancelSosBtn');
+
+    if (!sosTrigger || !progressBar) return;
+
+    const circumference = 2 * Math.PI * 90; // ~565.48
+    let holdTimer = null;
+    let startTime = 0;
+    const requiredHoldDuration = 2000; // 2 seconds
+
+    function startHold(e) {
+      if (e.cancelable) e.preventDefault();
+      startTime = Date.now();
+      
+      notice.textContent = "Transmitting distress in 2s...";
+      notice.classList.add('text-secondary', 'font-semibold');
+
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+
+      function frame() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / requiredHoldDuration, 1);
+        const offset = circumference - (progress * circumference);
+        progressBar.style.strokeDashoffset = offset;
+
+        if (progress < 1) {
+          holdTimer = requestAnimationFrame(frame);
+        } else {
+          triggerSosBroadcast();
+        }
+      }
+
+      holdTimer = requestAnimationFrame(frame);
+    }
+
+    function cancelHold() {
+      if (holdTimer) {
+        cancelAnimationFrame(holdTimer);
+        holdTimer = null;
+      }
+      progressBar.style.strokeDashoffset = circumference;
+      notice.textContent = "Hold for 2 seconds to activate";
+      notice.classList.remove('text-secondary', 'font-semibold');
+    }
+
+    function triggerSosBroadcast() {
+      cancelHold();
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100, 50, 300]);
+      }
+      alertModal.classList.remove('hidden');
+    }
+
+    sosTrigger.addEventListener('touchstart', startHold, { passive: false });
+    sosTrigger.addEventListener('touchend', cancelHold);
+    sosTrigger.addEventListener('touchcancel', cancelHold);
+
+    sosTrigger.addEventListener('mousedown', startHold);
+    window.addEventListener('mouseup', cancelHold);
+
+    cancelSosBtn.addEventListener('click', () => {
+      alertModal.classList.add('hidden');
+    });
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-md border-t border-surface-container-high/60"><div class="h-16 px-8 flex items-center justify-around max-w-md mx-auto"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] text-primary transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">radio_button_checked</span><span class="font-headline-md text-[11px] font-semibold tracking-wider uppercase mt-1">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] text-on-surface-variant/70 hover:text-on-surface transition-colors" data-path="nodes-nearby" href="#"><span class="material-symbols-outlined text-[24px]">hub</span><span class="font-headline-md text-[11px] font-medium tracking-wider uppercase mt-1">Nodes</span></a><a class="flex flex-col items-center justify-center min-w-[56px] text-on-surface-variant/70 hover:text-on-surface transition-colors" data-path="configuration" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-headline-md text-[11px] font-medium tracking-wider uppercase mt-1">Config</span></a></div></nav></body></html>

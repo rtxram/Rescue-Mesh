@@ -1,0 +1,6 @@
+{
+  "name": "RescueMesh",
+  "description": "Decentralized offline emergency BLE mesh communication app with store-carry-forward delivery, priority routing, GNSS location sharing, Noise E2EE, and compressed voice clips.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
